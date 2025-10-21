@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { FacadeService } from 'src/app/services/facade.service';
+import { AlumnosService } from 'src/app/services/alumnos.service';
 
 @Component({
   selector: 'app-registro-alumnos',
@@ -25,12 +27,19 @@ export class RegistroAlumnosComponent implements OnInit {
   public idUser: Number = 0;
 
   constructor(
-    private router: Router,
-    private location : Location,
-    public activatedRoute: ActivatedRoute
-  ) { }
+    private location: Location,
+    public activatedRoute: ActivatedRoute,
+    public alumnosService: AlumnosService,
+    private facadeService: FacadeService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.alumno = this.alumnosService.esquemaAlumno();
+    // Rol del usuario
+    this.alumno.rol = this.rol;
+
+    console.log("Datos alumno: ", this.alumno);
   }
 
   public regresar(){
@@ -38,7 +47,13 @@ export class RegistroAlumnosComponent implements OnInit {
   }
 
   public registrar(){
-    // Lógica para registrar un nuevo alumno
+    this.errors = {};
+    this.errors = this.alumnosService.validarAlumnos(this.alumno, this.editar);
+    if (Object.keys(this.errors).length > 0) {
+      return false;
+    }
+    // TODO: Aquí va toda la lógica para registrar al alumno
+    console.log('Pasó la validación. Datos alumno');
   }
 
   public actualizar(){
@@ -51,8 +66,7 @@ export class RegistroAlumnosComponent implements OnInit {
     if(this.inputType_1 == 'password'){
       this.inputType_1 = 'text';
       this.hide_1 = true;
-    }
-    else{
+    } else{
       this.inputType_1 = 'password';
       this.hide_1 = false;
     }
@@ -63,8 +77,7 @@ export class RegistroAlumnosComponent implements OnInit {
     if(this.inputType_2 == 'password'){
       this.inputType_2 = 'text';
       this.hide_2 = true;
-    }
-    else{
+    } else{
       this.inputType_2 = 'password';
       this.hide_2 = false;
     }

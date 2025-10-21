@@ -16,10 +16,10 @@ const httpOptions = {
 export class AdministradoresService {
 
   constructor(
-    private http: HttpClient,
-    private validatorService: ValidatorService,
-    private errorService: ErrorsService,
-    private facadeService: FacadeService
+    private http: HttpClient, // Para llamadas a peticiones HTTP
+    private validatorService: ValidatorService, // Para jalar validaciones
+    private errorService: ErrorsService, // Para jalar validaciones
+    private facadeService: FacadeService //Para la autenticación
   ) { }
 
   public esquemaAdmin(){

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FacadeService } from 'src/app/services/facade.service';
 import { Location } from '@angular/common';
+import { MaestrosService } from 'src/app/services/maestros.service';
 
 @Component({
   selector: 'app-registro-maestros',
@@ -49,21 +50,27 @@ export class RegistroMaestrosComponent implements OnInit {
   ];
 
   constructor(
-    private router: Router,
-    private location : Location,
+    private location: Location,
     public activatedRoute: ActivatedRoute,
-    private facadeService: FacadeService
-  ) { }
+    private maestrosService: MaestrosService,
+    private facadeService: FacadeService,
+    private router: Router
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   public regresar(){
     this.location.back();
   }
 
   public registrar(){
-
+    this.errors = {};
+    this.errors = this.maestrosService.validarMaestros(this.maestro, this.editar);
+    if (Object.keys(this.errors).length > 0) {
+      return false;
+    }
+    // TODO: Aquí va toda la lógica para registrar al alumno
+    console.log('Pasó la validación. Datos alumno');
   }
 
   public actualizar(){

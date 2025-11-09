@@ -47,13 +47,42 @@ export class RegistroAlumnosComponent implements OnInit {
   }
 
   public registrar(){
+    // Validaciones del formulario
     this.errors = {};
     this.errors = this.alumnosService.validarAlumnos(this.alumno, this.editar);
-    if (Object.keys(this.errors).length > 0) {
+    if(Object.keys(this.errors).length > 0){
       return false;
     }
-    // TODO: Aquí va toda la lógica para registrar al alumno
-    console.log('Pasó la validación. Datos alumno');
+
+    console.log("Paso validacion ");
+
+    // Se verifica si las contraseñas coinciden
+    if(this.alumno.password != this.alumno.confirmar_password){
+      alert('Las contraseñas no coinciden');
+      return false;
+    }
+    // Si pasa todas las validaciones se registra el alumno
+    this.alumnosService.registrarAlumno(this.alumno).subscribe({
+      next: (response:any) => {
+        //Aquí va la ejecución del servicio si todo es correcto
+        alert('Alumno registrado con éxito');
+        console.log("Alumno registrado",response);
+
+        //Validar si se registro que entonces navegue a la lista de alumno
+        if(this.token != ""){
+          this.router.navigate(['alumno']);
+        }else{
+          this.router.navigate(['/']);
+        }
+      },
+      error: (error:any) => {
+        if(error.status === 422){
+          this.errors = error.error.errors;
+        } else {
+          alert('Error al registrar el alumno');
+        }
+      }
+    });
   }
 
   public actualizar(){

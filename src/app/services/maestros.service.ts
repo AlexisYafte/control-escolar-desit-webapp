@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { FacadeService } from './facade.service';
 import { ErrorsService } from './tools/errors.service';
 import { ValidatorService } from './tools/validator.service';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -21,18 +23,18 @@ export class MaestrosService {
 
   public esquemaMaestro() {
     return {
-      clave_trabajador: '',
-      nombre: '',
-      apellidos: '',
-      email: '',
-      password: '',
-      confirmar_password: '',
-      fecha_nacimiento: null as Date | null,
-      telefono: '',
-      rfc: '',
-      cubiculo: '',
-      area_investigacion: '',
-      materias: [] as string[],
+      'id_trabajador': '',
+      'nombre': '',
+      'apellidos': '',
+      'email': '',
+      'password': '',
+      'confirmar_password': '',
+      'fecha_nacimiento': null as Date | null,
+      'telefono': '',
+      'rfc': '',
+      'cubiculo': '',
+      'area_investigacion': '',
+      'materias': [] as string[],
     };
   }
 
@@ -121,4 +123,11 @@ export class MaestrosService {
     }
     return edad;
   }
+
+  // Función para registrar un nuevo maestro
+      //Aquí comienzan las peticiones al backend (HTTP)
+      public registrarMaestro (data: any): Observable <any>{
+        return this.http.post<any>(`${environment.url_api}/maestro/`,data, httpOptions);
+      }
 }
+

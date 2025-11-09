@@ -3,6 +3,8 @@ import { FacadeService } from './facade.service';
 import { ErrorsService } from './tools/errors.service';
 import { ValidatorService } from './tools/validator.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -21,18 +23,19 @@ export class AlumnosService {
 
   public esquemaAlumno() {
     return {
-      rol: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      password: '',
-      confirmar_password: '',
-      telefono: '',
-      curp: '',
-      fecha_nacimiento: '',
-      rfc: '',
-      edad: '',
-      ocupacion: '',
+      'rol': '',
+      'matricula': '',
+      'first_name': '',
+      'last_name': '',
+      'email': '',
+      'password': '',
+      'confirmar_password': '',
+      'fecha_nacimiento': '',
+      'curp': '',
+      'rfc': '',
+      'edad': '',
+      'telefono': '',
+      'ocupacion': '',
     };
   }
 
@@ -69,6 +72,10 @@ export class AlumnosService {
       if (!this.validatorService.required(data['confirmar_password'])) {
         error['confirmar_password'] = this.errorService.required;
       }
+    }
+
+    if (!this.validatorService.required(data['fecha_nacimiento'])) {
+      error['fecha_nacimiento'] = this.errorService.required;
     }
 
     if (!this.validatorService.required(data['rfc'])) {
@@ -110,4 +117,10 @@ export class AlumnosService {
     //Return arreglo
     return error;
   }
+
+  // Función para registrar un nuevo alumno
+    //Aquí comienzan las peticiones al backend (HTTP)
+    public registrarAlumno (data: any): Observable <any>{
+      return this.http.post<any>(`${environment.url_api}/alumno/`,data, httpOptions);
+    }
 }

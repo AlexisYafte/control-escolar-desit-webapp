@@ -15,13 +15,13 @@
 
       <mat-form-field class="mat-input" appearance="outline">
           <mat-label>Nombre</mat-label>
-          <input matInput [(ngModel)]="maestro.first_name" placeholder="Escribe nombre" (keypress)="soloLetras($event)">
+          <input matInput [(ngModel)]="maestro.first_name" placeholder="Escribe nombre">
       </mat-form-field>
       <div *ngIf="errors.first_name" class="invalid-feedback">{{ errors.first_name }}</div>
 
       <mat-form-field class="mat-input" appearance="outline">
           <mat-label>Apellidos</mat-label>
-          <input matInput [(ngModel)]="maestro.last_name" placeholder="Escribe apellidos" (keypress)="soloLetras($event)">
+          <input matInput [(ngModel)]="maestro.last_name" placeholder="Escribe apellidos">
       </mat-form-field>
       <div *ngIf="errors.last_name" class="invalid-feedback">{{ errors.last_name }}</div>
 
@@ -95,8 +95,8 @@
           </mat-checkbox>
         </div>
         <div *ngIf="errors.materias_json" class="invalid-feedback">{{ errors.materias_json }}</div>
-      </div>
 
+      </div>
       <div class="section-buttons">
         <button class="btn btn-danger" (click)="regresar()">Cancelar</button>
         <button *ngIf="!editar" class="btn btn-primary" type="submit" (click)="registrar()">Registrar</button>

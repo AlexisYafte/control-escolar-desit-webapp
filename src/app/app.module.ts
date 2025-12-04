@@ -27,12 +27,35 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import {MatDialogModule} from '@angular/material/dialog';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
+// Modulo para las gráficas
+import { NgChartsModule } from 'ng2-charts';
 
 //Ngx-cookie-service
 import { CookieService } from 'ngx-cookie-service';
 
 // Third Party Modules
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { HomeScreenComponent } from './screens/home-screen/home-screen.component';
+import { AlumnosScreenComponent } from './screens/alumnos-screen/alumnos-screen.component';
+import { MaestrosScreenComponent } from './screens/maestros-screen/maestros-screen.component';
+import { AdminScreenComponent } from './screens/admin-screen/admin-screen.component';
+import { NavbarUserComponent } from './partials/navbar-user/navbar-user.component';
+import { SidebarComponent } from './partials/sidebar/sidebar.component';
+
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSortModule } from '@angular/material/sort';
+
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+import { EliminarUserModalComponent } from './modals/eliminar-user-modal/eliminar-user-modal.component';
+import { GraficasScreenComponent } from './screens/graficas-screen/graficas-screen.component';
+import { MateriasScreenComponent } from './screens/materias-screen/materias-screen.component';
+import { RegistroMateriasScreenComponent } from './screens/registro-materias-screen/registro-materias-screen.component';
+import { EditarMateriaComponent } from './modals/editar-materia/editar-materia.component';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +66,18 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     DashboardLayoutComponent,
     RegistroAdminComponent,
     RegistroAlumnosComponent,
-    RegistroMaestrosComponent
+    RegistroMaestrosComponent,
+    HomeScreenComponent,
+    AlumnosScreenComponent,
+    MaestrosScreenComponent,
+    AdminScreenComponent,
+    NavbarUserComponent,
+    SidebarComponent,
+    EliminarUserModalComponent,
+    GraficasScreenComponent,
+    MateriasScreenComponent,
+    RegistroMateriasScreenComponent,
+    EditarMateriaComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +95,14 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSidenavModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatDialogModule,
+    NgChartsModule,
+    NgxMaterialTimepickerModule,
   ],
   providers: [
     CookieService,

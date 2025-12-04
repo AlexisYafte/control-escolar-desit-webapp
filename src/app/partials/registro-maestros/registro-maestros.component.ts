@@ -26,7 +26,6 @@ export class RegistroMaestrosComponent implements OnInit {
   public token: string = "";
   public idUser: Number = 0;
 
-
   //Para el select
   public areas: any[] = [
     {value: '1', viewValue: 'Desarrollo Web'},
@@ -50,60 +49,90 @@ export class RegistroMaestrosComponent implements OnInit {
   ];
 
   constructor(
-    private location: Location,
+    private router: Router,
+    private location : Location,
     public activatedRoute: ActivatedRoute,
-    private maestrosService: MaestrosService,
     private facadeService: FacadeService,
-    private router: Router
-  ) {}
+    private maestrosService: MaestrosService
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+     //El primer if valida si existe un parámetro en la URL
+    if (this.activatedRoute.snapshot.params['id'] != undefined) {
+      this.editar = true;
+      //Asignamos a nuestra variable global el valor del ID que viene por la URL
+      this.idUser = this.activatedRoute.snapshot.params['id'];
+      console.log("ID User: ", this.idUser);
+      //Al iniciar la vista asignamos los datos del user
+      this.maestro = this.datos_user;
+    } else {
+      // Si no va a this.editar, entonces inicializamos el JSON para registro nuevo
+      this.maestro = this.maestrosService.esquemaMaestro();
+      this.maestro.rol = this.rol;
+      this.token = this.facadeService.getSessionToken();
+    }
+    //Imprimir datos en consola
+    console.log("Maestro: ", this.maestro);
+  }
 
   public regresar(){
     this.location.back();
   }
 
   public registrar(){
-    // Validaciones del formulario
+    //Validamos si el formulario está lleno y correcto
     this.errors = {};
     this.errors = this.maestrosService.validarMaestros(this.maestro, this.editar);
     if(Object.keys(this.errors).length > 0){
       return false;
     }
-
-    console.log("Paso validacion ");
-
-    // Se verifica si las contraseñas coinciden
-    if(this.maestro.password != this.maestro.confirmar_password){
-      alert('Las contraseñas no coinciden');
-      return false;
+    //Validar la contraseña
+    if(this.maestro.password == this.maestro.confirmar_password){
+      this.maestrosService.registrarMaestro(this.maestro).subscribe(
+        (response) => {
+          // Redirigir o mostrar mensaje de éxito
+          alert("Maestro registrado exitosamente");
+          console.log("Maestro registrado: ", response);
+          if(this.token && this.token !== ""){
+            this.router.navigate(["maestros"]);
+          }else{
+            this.router.navigate(["/"]);
+          }
+        },
+        (error) => {
+          // Manejar errores de la API
+          alert("Error al registrar maestro");
+          console.error("Error al registrar maestro: ", error);
+        }
+      );
+    }else{
+      alert("Las contraseñas no coinciden");
+      this.maestro.password="";
+      this.maestro.confirmar_password="";
     }
-    // Si pasa todas las validaciones se registra el maestro
-    this.maestrosService.registrarMaestro(this.maestro).subscribe({
-      next: (response:any) => {
-        //Aquí va la ejecución del servicio si todo es correcto
-        alert('Maestro registrado con éxito');
-        console.log("Maestro registrado",response);
-
-        //Validar si se registro que entonces navegue a la lista de maestros
-        if(this.token != ""){
-          this.router.navigate(['maestro']);
-        }else{
-          this.router.navigate(['/']);
-        }
-      },
-      error: (error:any) => {
-        if(error.status === 422){
-          this.errors = error.error.errors;
-        } else {
-          alert('Error al registrar el alumno');
-        }
-      }
-    });
   }
 
   public actualizar(){
-
+ // Lógica para actualizar los datos de un alumno existente
+    this.errors = {};
+    this.errors = this.maestrosService.validarMaestros(this.maestro, this.editar);
+    if(Object.keys(this.errors).length > 0){
+      return false;
+    }
+    // Ejecutamos el servicio de actualización
+    this.maestrosService.actualizarMaestro(this.maestro).subscribe(
+      (response) => {
+        // Redirigir o mostrar mensaje de éxito
+        alert("Maestro actualizado exitosamente");
+        console.log("Maestro actualizado: ", response);
+        this.router.navigate(["maestros"]);
+      },
+      (error) => {
+        // Manejar errores de la API
+        alert("Error al actualizar maestros");
+        console.error("Error al actualizar maestros: ", error);
+      }
+    );
   }
 
   //Funciones para password
@@ -139,7 +168,6 @@ export class RegistroMaestrosComponent implements OnInit {
     this.maestro.fecha_nacimiento = event.value.toISOString().split("T")[0];
     console.log("Fecha: ", this.maestro.fecha_nacimiento);
   }
-
 
   // Funciones para los checkbox
   public checkboxChange(event:any){
@@ -181,4 +209,5 @@ export class RegistroMaestrosComponent implements OnInit {
       event.preventDefault();
     }
   }
+
 }

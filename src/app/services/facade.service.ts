@@ -5,6 +5,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs/internal/Observable';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -56,6 +57,23 @@ export class FacadeService {
     }
 
     return error;
+  }
+
+  //Servicio para login
+  public login(username:String, password:String) {
+    let data = {
+      "username": username,
+      "password": password
+    }
+    return this.http.post<any>(`${environment.url_api}/login/`,data, httpOptions);
+  }
+
+  //Cerrar sesión
+  public logout(): Observable<any> {
+    let headers: any;
+    let token = this.getSessionToken();
+    headers = new HttpHeaders({ 'Content-Type': 'application/json' , 'Authorization': 'Bearer '+token});
+    return this.http.get<any>(`${environment.url_api}/logout/`, {headers: headers});
   }
 
   // Funciones para utilizar las cookies en web
